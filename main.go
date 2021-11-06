@@ -22,6 +22,7 @@ func main() {
 	// Service
 	r := chi.NewRouter()
 	r.Use(httplog.RequestLogger(logger))
+	r.Use(middleware.RealIP)
 	r.Use(middleware.Heartbeat("/ping"))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -55,4 +56,3 @@ func main() {
 
 	http.ListenAndServe(":5000", r)
 }
-
