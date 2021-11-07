@@ -3,7 +3,7 @@ FROM golang:1.17.3-alpine as builder
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
-RUN CGOENABLED=0 GOOS=linux go build -a -o api .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o api .
 
 # generate clean, final image for end users
 FROM scratch
