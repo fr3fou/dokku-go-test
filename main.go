@@ -2,7 +2,8 @@ package main
 
 import (
 	"net/http"
-	"fmt"
+	"encoding/json"
+
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -27,9 +28,8 @@ func main() {
 	r.Use(middleware.Heartbeat("/ping"))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		i := r.Header.Get("X-Forwarded-For")
-		p := r.Header.Get("X-Real-IP")
-		w.Write([]byte(fmt.Sprintf("X-Real-IP: %s, X-Forwarded-For: %s", i, p)))
+		bs, _ := json.Marshal(r.Header)
+		w.Write([]byte(bs))
 	})
 
 	r.Get("/panic", func(w http.ResponseWriter, r *http.Request) {
