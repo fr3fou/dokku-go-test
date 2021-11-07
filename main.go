@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Logger
-	httplog.NewLogger("httplog-example", httplog.Options{
+	logger := httplog.NewLogger("httplog-example", httplog.Options{
 		// JSON: true,
 		Concise: true,
 		// Tags: map[string]string{
@@ -21,8 +21,7 @@ func main() {
 
 	// Service
 	r := chi.NewRouter()
-//	r.Use(httplog.RequestLogger(logger))
-	r.Use(middleware.Logger)
+	r.Use(httplog.RequestLogger(logger))
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Heartbeat("/ping"))
 
