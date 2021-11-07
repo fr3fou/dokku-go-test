@@ -10,5 +10,4 @@ FROM scratch
 COPY --from=builder /app /app
 
 WORKDIR /app
-EXPOSE 5000
 ENTRYPOINT [ "./api" ]
