@@ -13,7 +13,7 @@ import (
 func main() {
 	// Logger
 	logger := httplog.NewLogger("httplog-example", httplog.Options{
-		// JSON: true,
+		JSON: true,
 		Concise: true,
 		// Tags: map[string]string{
 		// 	"version": "v1.0-81aa4244d9fc8076a",
@@ -25,7 +25,6 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(httplog.RequestLogger(logger))
 	r.Use(middleware.RealIP)
-	r.Use(middleware.Heartbeat("/ping"))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		bs, _ := json.Marshal(r.Header)
@@ -57,5 +56,14 @@ func main() {
 		w.Write([]byte("err here"))
 	})
 
-	http.ListenAndServe(":5000", r)
+	r.Get("/azis/health", func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(200)
+		rw.Write([]byte(`{"status":"ok"}`))
+	})
+	r.Get("/azis/ping", func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(200)
+		rw.Write([]byte(`pong`))
+	})
+
+	http.ListenAndServe(":8080", r)
 }
